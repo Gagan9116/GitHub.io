@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agastya Bansal Turns 1! 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #FF6B9D;
+      --yellow: #FFD93D;
+      --blue: #6BCEFF;
+      --green: #6BCB77;
+      --purple: #C77DFF;
+      --orange: #FF9A3C;
+      --bg: #FFF8F0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    #confetti-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2rem; z-index: 1;
+      background: radial-gradient(ellipse at top, #fff0fa 0%, #FFF8F0 60%);
+    }
+
+    .big-one {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(6rem, 22vw, 18rem);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--pink), var(--orange), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 8px 24px rgba(255,107,157,0.25));
+      animation: pop 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both;
+    }
+
+    @keyframes pop {
+      0%   { transform: scale(0.4) rotate(-5deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .hero-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.6rem, 6vw, 4.5rem);
+      color: var(--purple); margin-top: -0.5rem;
+      letter-spacing: 1px;
+      animation: slideUp 0.6s 0.3s ease both;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.8rem, 2.5vw, 1.4rem);
+      color: #888; font-weight: 700; margin-top: 0.5rem;
+      letter-spacing: 3px; text-transform: uppercase;
+      animation: slideUp 0.6s 0.5s ease both;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .balloons {
+      position: absolute; width: 100%; height: 100%;
+      top: 0; left: 0; pointer-events: none; overflow: hidden;
+    }
+
+    .balloon { position: absolute; bottom: -10%; animation: floatUp linear infinite; }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(-5deg); opacity: 0.9; }
+      50%  { transform: translateY(-45vh) rotate(5deg); opacity: 0.9; }
+      100% { transform: translateY(-100vh) rotate(-3deg); opacity: 0; }
+    }
+
+    /* ── BIRTHDAY SONG BUTTON ── */
+    .song-btn {
+      margin-top: 1.5rem;
+      padding: 0.9rem 2rem;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: white; border: none; border-radius: 50px;
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(255,107,157,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: slideUp 0.6s 0.7s ease both;
+      display: none;
+    }
+
+    .song-btn:hover { transform: scale(1.06); box-shadow: 0 10px 30px rgba(255,107,157,0.5); }
+    .song-btn.playing { background: linear-gradient(135deg, var(--purple), var(--blue)); }
+
+    /* ── SECTIONS ── */
+    .section {
+      position: relative; z-index: 1;
+      padding: 4rem 1.5rem; text-align: center;
+    }
+
+    .section-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      margin-bottom: 2rem; color: #333;
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdown-wrap {
+      display: flex; justify-content: center;
+      gap: clamp(0.5rem, 2.5vw, 2rem); flex-wrap: wrap;
+    }
+
+    .cd-box {
+      background: white; border-radius: 24px;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(0.8rem, 2vw, 1rem);
+      min-width: clamp(65px, 18vw, 120px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      position: relative; overflow: hidden; transition: transform 0.3s;
+    }
+
+    .cd-box:hover { transform: translateY(-6px) scale(1.04); }
+    .cd-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; }
+    .cd-box:nth-child(1)::before { background: var(--pink); }
+    .cd-box:nth-child(2)::before { background: var(--yellow); }
+    .cd-box:nth-child(3)::before { background: var(--blue); }
+    .cd-box:nth-child(4)::before { background: var(--green); }
+
+    .cd-num {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 7vw, 4.5rem);
+      line-height: 1; color: #333;
+    }
+
+    .cd-label {
+      font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+      font-weight: 800; letter-spacing: 2px;
+      text-transform: uppercase; color: #aaa; margin-top: 0.3rem;
+    }
+
+    .birthday-message-banner {
+      display: none;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.3rem, 4vw, 3rem);
+      color: var(--pink);
+      animation: pulse 1s infinite alternate;
+      padding: 0 1rem;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to   { transform: scale(1.05); }
+    }
+
+    /* ── PHOTO JOURNEY ── */
+    .journey-section {
+      position: relative; z-index: 1;
+      padding: 4rem 1.5rem;
+      background: linear-gradient(135deg, #f0f8ff, #fff0fa);
+    }
+
+    .upload-area {
+      max-width: 600px; margin: 0 auto 2rem;
+      border: 3px dashed var(--pink); border-radius: 24px;
+      padding: clamp(1.5rem, 4vw, 2.5rem) 1.5rem;
+      text-align: center; cursor: pointer; background: white;
+      transition: all 0.3s; position: relative;
+    }
+
+    .upload-area:hover, .upload-area.drag-over {
+      background: #fff0f7; border-color: var(--purple); transform: scale(1.01);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute; inset: 0; opacity: 0;
+      cursor: pointer; width: 100%; height: 100%;
+    }
+
+    .upload-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+
+    .upload-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--purple); margin-bottom: 0.4rem;
+    }
+
+    .upload-sub { color: #aaa; font-size: 0.9rem; font-weight: 600; }
+
+    .month-selector {
+      max-width: 600px; margin: 0 auto 1rem;
+      display: none; background: white; border-radius: 20px;
+      padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    }
+
+    .month-selector label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem; color: #555; display: block; margin-bottom: 0.6rem;
+    }
+
+    .month-selector select {
+      width: 100%; padding: 0.8rem 1rem; border-radius: 16px;
+      border: 2px solid var(--pink); font-family: 'Nunito', sans-serif;
+      font-size: 1rem; font-weight: 700; color: #444;
+      outline: none; cursor: pointer; background: white; margin-bottom: 1rem;
+    }
+
+    .confirm-btn {
+      display: block; margin: 0 auto;
+      padding: 0.8rem 2.5rem; background: var(--pink); color: white;
+      border: none; border-radius: 50px; font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem; cursor: pointer; transition: transform 0.2s, background 0.2s;
+    }
+
+    .confirm-btn:hover { transform: scale(1.05); background: var(--purple); }
+
+    .timeline { max-width: 1100px; margin: 2rem auto 0; }
+
+    .month-group { margin-bottom: 3rem; text-align: left; }
+
+    .month-label {
+      font-family: 'Fredoka One', cursive; font-size: 1.4rem;
+      color: white; display: inline-block; padding: 0.4rem 1.5rem;
+      border-radius: 50px; margin-bottom: 1rem;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 25vw, 180px), 1fr));
+      gap: 0.8rem;
+    }
+
+    .photo-item {
+      position: relative; border-radius: 16px; overflow: hidden;
+      aspect-ratio: 1; box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeInPhoto 0.4s ease both;
+    }
+
+    @keyframes fadeInPhoto {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .photo-item:hover { transform: scale(1.04); box-shadow: 0 12px 35px rgba(0,0,0,0.18); }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+
+    .photo-delete {
+      position: absolute; top: 6px; right: 6px;
+      background: rgba(255,255,255,0.92); border: none; border-radius: 50%;
+      width: 30px; height: 30px; font-size: 0.85rem; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      color: #ff4444; font-weight: bold; transition: background 0.2s;
+    }
+
+    .photo-item:hover .photo-delete { display: flex; }
+    .photo-delete:hover { background: #ff4444; color: white; }
+
+    .empty-state {
+      text-align: center; padding: 2rem;
+      color: #ccc; font-size: 1.1rem; font-weight: 700;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.88); z-index: 1000;
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw; max-height: 88vh; border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5); object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: white; border: none; border-radius: 50%;
+      width: 44px; height: 44px; font-size: 1.3rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: white; border: none; border-radius: 50%;
+      width: 44px; height: 44px; font-size: 1.4rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .lightbox-prev { left: 0.5rem; }
+    .lightbox-next { right: 0.5rem; }
+
+    /* ── WISHES WALL ── */
+    .wishes-section {
+      position: relative; z-index: 1;
+      padding: 4rem 1.5rem;
+    }
+
+    .wish-form {
+      max-width: 600px; margin: 0 auto 3rem;
+      background: white; border-radius: 28px;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      box-shadow: 0 12px 40px rgba(199,125,255,0.15);
+    }
+
+    .wish-form input,
+    .wish-form textarea {
+      width: 100%; padding: 0.9rem 1.2rem;
+      border: 2px solid #eee; border-radius: 16px;
+      font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600;
+      color: #444; outline: none; transition: border 0.2s;
+      margin-bottom: 1rem; resize: none; background: #fafafa;
+    }
+
+    .wish-form input:focus,
+    .wish-form textarea:focus { border-color: var(--pink); background: white; }
+
+    .wish-submit {
+      width: 100%; padding: 1rem;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: white; border: none; border-radius: 16px;
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      cursor: pointer; transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .wish-submit:hover { transform: scale(1.02); }
+    .wish-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .wish-status {
+      text-align: center; margin-top: 0.8rem;
+      font-weight: 700; font-size: 0.95rem;
+      min-height: 1.5rem;
+    }
+
+    .wish-status.success { color: var(--green); }
+    .wish-status.error   { color: #ff4444; }
+
+    /* Wishes Grid */
+    .wishes-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(240px, 40vw, 280px), 1fr));
+      gap: 1.2rem;
+    }
+
+    .wish-card {
+      background: white; border-radius: 20px;
+      padding: 1.5rem; box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+      position: relative; overflow: hidden;
+      animation: fadeInPhoto 0.4s ease both;
+      transition: transform 0.3s;
+    }
+
+    .wish-card:hover { transform: translateY(-4px); }
+
+    .wish-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+    }
+
+    .wish-card:nth-child(4n+1)::before { background: var(--pink); }
+    .wish-card:nth-child(4n+2)::before { background: var(--yellow); }
+    .wish-card:nth-child(4n+3)::before { background: var(--blue); }
+    .wish-card:nth-child(4n)::before   { background: var(--purple); }
+
+    .wish-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    .wish-text {
+      font-size: 0.95rem; line-height: 1.6;
+      color: #555; font-weight: 600; margin-bottom: 0.8rem;
+    }
+
+    .wish-author {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem; color: var(--purple);
+    }
+
+    .wish-date {
+      font-size: 0.75rem; color: #ccc;
+      font-weight: 700; margin-top: 0.2rem;
+    }
+
+    .wishes-loading {
+      text-align: center; color: #ccc;
+      font-weight: 700; padding: 2rem; font-size: 1rem;
+    }
+
+    /* ── SETUP NOTICE ── */
+    .setup-notice {
+      max-width: 600px; margin: 0 auto 2rem;
+      background: #fff8e1; border: 2px solid var(--yellow);
+      border-radius: 16px; padding: 1.2rem 1.5rem;
+      font-size: 0.9rem; font-weight: 700; color: #888;
+      display: none;
+    }
+
+    .setup-notice a { color: var(--purple); }
+
+    /* ── MESSAGE ── */
+    .message-section { position: relative; z-index: 1; padding: 4rem 1.5rem; }
+
+    .message-card {
+      max-width: 680px; margin: 0 auto; background: white;
+      border-radius: 32px; padding: clamp(1.8rem, 5vw, 4rem);
+      box-shadow: 0 16px 60px rgba(199,125,255,0.15);
+    }
+
+    .quote-mark {
+      font-family: 'Fredoka One', cursive; font-size: 5rem;
+      line-height: 0.5; color: var(--pink); opacity: 0.3;
+      display: block; margin-bottom: 1rem;
+    }
+
+    .message-text {
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      line-height: 1.9; color: #555; font-weight: 600;
+    }
+
+    .message-text strong { color: var(--purple); }
+
+    .signature {
+      margin-top: 2rem; font-family: 'Fredoka One', cursive;
+      font-size: 1.3rem; color: var(--pink); text-align: right;
+    }
+
+    .star-row {
+      display: flex; justify-content: center;
+      gap: 0.8rem; font-size: 1.8rem; margin: 1.5rem 0; flex-wrap: wrap;
+    }
+
+    /* ── SHARE BAR ── */
+    .share-bar {
+      position: relative; z-index: 1;
+      text-align: center; padding: 2rem 1.5rem;
+      background: linear-gradient(135deg, #fff0fa, #f0f8ff);
+    }
+
+    .share-bar p {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.3rem; color: #555; margin-bottom: 1rem;
+    }
+
+    .share-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem; border-radius: 50px; border: none;
+      font-family: 'Fredoka One', cursive; font-size: 1rem;
+      cursor: pointer; transition: transform 0.2s; margin: 0.3rem;
+      text-decoration: none; color: white;
+    }
+
+    .share-btn:hover { transform: scale(1.06); }
+    .share-wa   { background: #25D366; }
+    .share-copy { background: var(--purple); }
+
+    footer {
+      position: relative; z-index: 1; text-align: center;
+      padding: 2rem 1rem; font-size: 0.85rem; color: #bbb; font-weight: 700;
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE TWEAKS ── */
+    @media (max-width: 480px) {
+      .cd-box { border-radius: 16px; }
+      .wish-form { border-radius: 20px; }
+      .lightbox-nav { display: none; }
+      .share-btn { width: 100%; max-width: 280px; justify-content: center; }
+      .share-bar { display: flex; flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="balloons" id="balloons"></div>
+  <div class="big-one">1</div>
+  <div class="hero-name">Happy Birthday, Agastya Bansal! 🎂</div>
+  <div class="hero-sub">The Big First Birthday · 20th March</div>
+  <button class="song-btn" id="songBtn" onclick="toggleSong()">🎵 Play Happy Birthday!</button>
+</section>
+
+<!-- ── COUNTDOWN ── -->
+<section class="section reveal">
+  <div class="section-title">🎈 Countdown to the Big Day!</div>
+  <div class="countdown-wrap" id="countdown">
+    <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Days</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Hours</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Mins</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Secs</div></div>
+  </div>
+  <div class="birthday-message-banner" id="bday-banner">🎉 Today is Agastya's Big Day! 🎉</div>
+</section>
+
+<!-- ── PHOTO JOURNEY ── -->
+<section class="journey-section reveal">
+  <div class="section-title">📸 Agastya's First Year Journey</div>
+  <div class="upload-area" id="uploadArea">
+    <input type="file" id="fileInput" accept="image/*" multiple/>
+    <div class="upload-icon">🖼️</div>
+    <div class="upload-title">Drop photos here or tap to upload</div>
+    <div class="upload-sub">Select multiple photos · Grouped by month</div>
+  </div>
+  <div class="month-selector" id="monthSelector">
+    <label>📅 Which month are these photos from?</label>
+    <select id="monthSelect">
+      <option value="Birth Day 🌟">Birth Day 🌟</option>
+      <option value="Month 1 👶">Month 1 👶</option>
+      <option value="Month 2 🍼">Month 2 🍼</option>
+      <option value="Month 3 😊">Month 3 😊</option>
+      <option value="Month 4 🌸">Month 4 🌸</option>
+      <option value="Month 5 🌈">Month 5 🌈</option>
+      <option value="Month 6 🎵">Month 6 🎵</option>
+      <option value="Month 7 🐣">Month 7 🐣</option>
+      <option value="Month 8 🌻">Month 8 🌻</option>
+      <option value="Month 9 🚀">Month 9 🚀</option>
+      <option value="Month 10 🦁">Month 10 🦁</option>
+      <option value="Month 11 🌟">Month 11 🌟</option>
+      <option value="1st Birthday 🎂">1st Birthday 🎂</option>
+    </select>
+    <button class="confirm-btn" id="confirmBtn">✅ Add photos to this month</button>
+  </div>
+  <div class="timeline" id="timeline">
+    <div class="empty-state" id="emptyState">📷 Upload photos to build Agastya's first year story!</div>
+  </div>
+</section>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="Photo"/>
+  <button class="lightbox-nav lightbox-next" id="lbNext">›</button>
+</div>
+
+<!-- ── WISHES WALL ── -->
+<section class="wishes-section reveal">
+  <div class="section-title">💌 Birthday Wishes for Agastya</div>
+
+  <div class="setup-notice" id="setupNotice">
+    ⚙️ To save wishes permanently, add your JSONBin API key below in the code.
+    <a href="https://jsonbin.io" target="_blank">Get a free key at jsonbin.io →</a>
+  </div>
+
+  <div class="wish-form">
+    <input type="text" id="wishName" placeholder="Your name 👤" maxlength="40"/>
+    <textarea id="wishText" placeholder="Write a birthday wish for Agastya... 🎉" rows="3" maxlength="200"></textarea>
+    <button class="wish-submit" id="wishSubmit" onclick="submitWish()">Send Wish 💌</button>
+    <div class="wish-status" id="wishStatus"></div>
+  </div>
+
+  <div class="wishes-loading" id="wishesLoading">Loading wishes... 🎈</div>
+  <div class="wishes-grid" id="wishesGrid"></div>
+</section>
+
+<!-- ── MESSAGE ── -->
+<section class="message-section reveal">
+  <div class="section-title" style="text-align:center;">💝 A Message from Mamma &amp; Papa</div>
+  <div class="star-row">⭐🌟✨🌟⭐</div>
+  <div class="message-card">
+    <span class="quote-mark">"</span>
+    <p class="message-text">
+      Dear <strong>Agastya</strong>,<br><br>
+      One whole year ago, you came into our world and turned everything into magic.
+      Every smile, every giggle, every tiny step —
+      you make us the <strong>luckiest parents in the whole universe</strong>. 🌍<br><br>
+      Watching you grow has been the greatest adventure of our lives.
+      You are our sunshine on cloudy days, our reason to laugh a little louder
+      and love a little deeper.<br><br>
+      As you turn <strong>ONE</strong>, we wish you a lifetime full of
+      <strong>joy, wonder, laughter</strong>, and all the cake you can eat. 🍰<br><br>
+      We love you more than words can ever say — today, tomorrow, and always. 💕
+    </p>
+    <div class="signature">— Mamma &amp; Papa 🥰</div>
+  </div>
+</section>
+
+<!-- ── SHARE ── -->
+<div class="share-bar reveal">
+  <p>🌟 Share Agastya's special day!</p>
+  <a class="share-btn share-wa" id="shareWa" href="#" target="_blank">
+    💬 Share on WhatsApp
+  </a>
+  <button class="share-btn share-copy" onclick="copyLink()">
+    🔗 Copy Link
+  </button>
+</div>
+
+<footer>Made with 💖 for Agastya Bansal's First Birthday · 20th March 🎂</footer>
+
+<script>
+// ════════════════════════════════════════════
+// ⚙️  JSONBIN SETUP — replace these two values
+//     1. Go to https://jsonbin.io → sign up free
+//     2. Create a new Bin with content: {"wishes":[]}
+//     3. Copy your Master Key and Bin ID below
+// ════════════════════════════════════════════
+const JSONBIN_API_KEY = '$2a$10$3UdEaKBIPGPsMoWXxj5Ksef6hvFp5xjI9xJK6Rdeyac2NZn2hdKvG';
+const JSONBIN_BIN_ID  = '69b7b499c3097a1dd52c2f0b';
+const SETUP_DONE = JSONBIN_API_KEY !== '$2a$10$3UdEaKBIPGPsMoWXxj5Ksef6hvFp5xjI9xJK6Rdeyac2NZn2hdKvG';
+
+// ════════════════════════════════════════════
+// CONFETTI
+// ════════════════════════════════════════════
+const canvas = document.getElementById('confetti-canvas');
+const ctx    = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+const COLORS = ['#FF6B9D','#FFD93D','#6BCEFF','#6BCB77','#C77DFF','#FF9A3C'];
+const pieces = Array.from({length: 100}, () => ({
+  x: Math.random()*canvas.width, y: Math.random()*canvas.height - canvas.height,
+  w: Math.random()*10+5, h: Math.random()*6+3,
+  color: COLORS[Math.floor(Math.random()*COLORS.length)],
+  rot: Math.random()*360, rotSpeed: (Math.random()-0.5)*3,
+  speed: Math.random()*2+0.8, drift: (Math.random()-0.5)*1.5
+}));
+function drawConfetti() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pieces.forEach(p => {
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+    ctx.fillStyle=p.color; ctx.globalAlpha=0.8;
+    ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    p.y+=p.speed; p.x+=p.drift; p.rot+=p.rotSpeed;
+    if(p.y>canvas.height+20){ p.y=-20; p.x=Math.random()*canvas.width; }
+  });
+  requestAnimationFrame(drawConfetti);
+}
+drawConfetti();
+
+// ════════════════════════════════════════════
+// BALLOONS
+// ════════════════════════════════════════════
+const balloonEmojis = ['🎈','🎈','🎈','🎉','🎊','🎁','⭐','🌟'];
+const bc = document.getElementById('balloons');
+for(let i=0;i<14;i++){
+  const el=document.createElement('div'); el.className='balloon';
+  el.textContent=balloonEmojis[Math.floor(Math.random()*balloonEmojis.length)];
+  el.style.cssText=`left:${Math.random()*100}%;font-size:${Math.random()*24+28}px;animation-duration:${Math.random()*8+7}s;animation-delay:${Math.random()*10}s;`;
+  bc.appendChild(el);
+}
+
+// ════════════════════════════════════════════
+// COUNTDOWN — hides at midnight on 20th March
+// ════════════════════════════════════════════
+function updateCountdown() {
+  const now   = new Date();
+  const bday  = new Date(now.getFullYear(), 2, 20, 0, 0, 0); // March 20
+  const isBday = now.getDate()===20 && now.getMonth()===2;
+  const diff  = bday - now;
+
+  if (isBday || diff <= 0) {
+    document.getElementById('countdown').style.display = 'none';
+    document.getElementById('bday-banner').style.display = 'block';
+    document.getElementById('songBtn').style.display = 'inline-flex';
+    // Auto-play on birthday after a short delay
+    if (isBday) setTimeout(() => { if (!audioPlaying) toggleSong(); }, 1500);
+    return;
+  }
+
+  document.getElementById('cd-days').textContent  = String(Math.floor(diff/(864e5))).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(Math.floor(diff%(864e5)/36e5)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent  = String(Math.floor(diff%(36e5)/6e4)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent  = String(Math.floor(diff%(6e4)/1e3)).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ════════════════════════════════════════════
+// HAPPY BIRTHDAY SONG (Web Audio API)
+// ════════════════════════════════════════════
+let audioCtx = null;
+let audioPlaying = false;
+let songTimeout = null;
+
+// Notes: [frequency, duration] — Happy Birthday in G major
+const song = [
+  [392,0.3],[392,0.1],[440,0.4],[392,0.4],[523,0.4],[494,0.8],
+  [392,0.3],[392,0.1],[440,0.4],[392,0.4],[587,0.4],[523,0.8],
+  [392,0.3],[392,0.1],[784,0.4],[659,0.4],[523,0.4],[494,0.4],[440,0.8],
+  [698,0.3],[698,0.1],[659,0.4],[523,0.4],[587,0.4],[523,0.8]
+];
+
+function playNote(freq, startTime, duration) {
+  const osc  = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, startTime);
+  gain.gain.setValueAtTime(0.4, startTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.05);
+}
+
+function toggleSong() {
+  const btn = document.getElementById('songBtn');
+  if (audioPlaying) {
+    if (audioCtx) { audioCtx.close(); audioCtx = null; }
+    audioPlaying = false;
+    btn.textContent = '🎵 Play Happy Birthday!';
+    btn.classList.remove('playing');
+    return;
+  }
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  audioPlaying = true;
+  btn.textContent = '⏹ Stop Music';
+  btn.classList.add('playing');
+  let time = audioCtx.currentTime + 0.1;
+  song.forEach(([freq, dur]) => {
+    playNote(freq, time, dur * 0.9);
+    time += dur + 0.02;
+  });
+  // Auto-stop after song ends
+  const totalDuration = song.reduce((s,[,d])=>s+d+0.02,0) * 1000 + 500;
+  songTimeout = setTimeout(() => {
+    audioPlaying = false;
+    btn.textContent = '🎵 Play Happy Birthday!';
+    btn.classList.remove('playing');
+  }, totalDuration);
+}
+
+// ════════════════════════════════════════════
+// PHOTO JOURNEY
+// ════════════════════════════════════════════
+const monthColors = ['#FF6B9D','#FFD93D','#6BCEFF','#6BCB77','#C77DFF','#FF9A3C','#FF6B9D','#6BCEFF','#FFD93D','#6BCB77','#C77DFF','#FF9A3C','#FF6B9D'];
+const monthOrder  = ['Birth Day 🌟','Month 1 👶','Month 2 🍼','Month 3 😊','Month 4 🌸','Month 5 🌈','Month 6 🎵','Month 7 🐣','Month 8 🌻','Month 9 🚀','Month 10 🦁','Month 11 🌟','1st Birthday 🎂'];
+let photos = {}, lightboxImages = [], lightboxIndex = 0, pendingFiles = null;
+
+const fileInput     = document.getElementById('fileInput');
+const uploadArea    = document.getElementById('uploadArea');
+const monthSelector = document.getElementById('monthSelector');
+const monthSelect   = document.getElementById('monthSelect');
+const confirmBtn    = document.getElementById('confirmBtn');
+const timeline      = document.getElementById('timeline');
+const emptyState    = document.getElementById('emptyState');
+
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.classList.remove('drag-over'); showMonthPicker(e.dataTransfer.files); });
+fileInput.addEventListener('change', () => showMonthPicker(fileInput.files));
+
+function showMonthPicker(files) {
+  if (!files || !files.length) return;
+  pendingFiles = files;
+  monthSelector.style.display = 'block';
+  monthSelector.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+confirmBtn.addEventListener('click', () => {
+  if (!pendingFiles) return;
+  const month = monthSelect.value;
+  if (!photos[month]) photos[month] = [];
+  let loaded = 0;
+  Array.from(pendingFiles).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      photos[month].push(e.target.result);
+      if (++loaded === pendingFiles.length) {
+        pendingFiles = null; fileInput.value = '';
+        monthSelector.style.display = 'none';
+        renderTimeline();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function renderTimeline() {
+  timeline.innerHTML = ''; lightboxImages = [];
+  const keys = monthOrder.filter(m => photos[m] && photos[m].length);
+  if (!keys.length) { timeline.appendChild(emptyState); emptyState.style.display='block'; return; }
+  keys.forEach((month, mi) => {
+    const group = document.createElement('div'); group.className = 'month-group';
+    const lbl = document.createElement('div'); lbl.className = 'month-label';
+    lbl.textContent = month; lbl.style.background = monthColors[mi % monthColors.length];
+    group.appendChild(lbl);
+    const grid = document.createElement('div'); grid.className = 'photo-grid';
+    photos[month].forEach((src, pi) => {
+      const gi = lightboxImages.length; lightboxImages.push(src);
+      const item = document.createElement('div'); item.className = 'photo-item';
+      const img = document.createElement('img'); img.src = src; img.alt = month;
+      img.onclick = () => openLightbox(gi);
+      const del = document.createElement('button'); del.className = 'photo-delete'; del.textContent = '✕';
+      del.onclick = e => { e.stopPropagation(); photos[month].splice(pi,1); if(!photos[month].length) delete photos[month]; renderTimeline(); };
+      item.appendChild(img); item.appendChild(del); grid.appendChild(item);
+    });
+    group.appendChild(grid); timeline.appendChild(group);
+  });
+}
+
+function openLightbox(i) {
+  lightboxIndex = i;
+  document.getElementById('lbImg').src = lightboxImages[i];
+  document.getElementById('lightbox').classList.add('open');
+}
+document.getElementById('lbClose').onclick = () => document.getElementById('lightbox').classList.remove('open');
+document.getElementById('lightbox').onclick = e => { if(e.target===document.getElementById('lightbox')) document.getElementById('lightbox').classList.remove('open'); };
+document.getElementById('lbPrev').onclick = () => { lightboxIndex=(lightboxIndex-1+lightboxImages.length)%lightboxImages.length; document.getElementById('lbImg').src=lightboxImages[lightboxIndex]; };
+document.getElementById('lbNext').onclick = () => { lightboxIndex=(lightboxIndex+1)%lightboxImages.length; document.getElementById('lbImg').src=lightboxImages[lightboxIndex]; };
+document.addEventListener('keydown', e => {
+  if(!document.getElementById('lightbox').classList.contains('open')) return;
+  if(e.key==='ArrowLeft') document.getElementById('lbPrev').click();
+  if(e.key==='ArrowRight') document.getElementById('lbNext').click();
+  if(e.key==='Escape') document.getElementById('lightbox').classList.remove('open');
+});
+
+// ════════════════════════════════════════════
+// WISHES WALL (JSONBin.io)
+// ════════════════════════════════════════════
+const wishEmojis = ['🎂','🎈','🌟','💕','🥳','✨','🎉','🌈','💖','🍰'];
+
+if (!SETUP_DONE) {
+  document.getElementById('setupNotice').style.display = 'block';
+  document.getElementById('wishesLoading').textContent = '⚙️ Set up JSONBin to save wishes permanently!';
+} else {
+  loadWishes();
+}
+
+async function loadWishes() {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    const data = await res.json();
+    const wishes = data.record?.wishes || [];
+    document.getElementById('wishesLoading').style.display = 'none';
+    renderWishes(wishes);
+  } catch(e) {
+    document.getElementById('wishesLoading').textContent = '⚠️ Could not load wishes. Check your JSONBin setup.';
+  }
+}
+
+function renderWishes(wishes) {
+  const grid = document.getElementById('wishesGrid');
+  grid.innerHTML = '';
+  if (!wishes.length) {
+    grid.innerHTML = '<div class="wishes-loading">No wishes yet — be the first! 🎉</div>';
+    return;
+  }
+  [...wishes].reverse().forEach(w => {
+    const card = document.createElement('div'); card.className = 'wish-card';
+    card.innerHTML = `
+      <div class="wish-emoji">${w.emoji}</div>
+      <div class="wish-text">${escapeHtml(w.text)}</div>
+      <div class="wish-author">— ${escapeHtml(w.name)}</div>
+      <div class="wish-date">${w.date}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+async function submitWish() {
+  const name = document.getElementById('wishName').value.trim();
+  const text = document.getElementById('wishText').value.trim();
+  const status = document.getElementById('wishStatus');
+  const btn = document.getElementById('wishSubmit');
+
+  if (!name) { status.textContent = '⚠️ Please enter your name!'; status.className='wish-status error'; return; }
+  if (!text) { status.textContent = '⚠️ Please write a wish!'; status.className='wish-status error'; return; }
+
+  if (!SETUP_DONE) {
+    status.textContent = '⚠️ JSONBin not set up yet. Wishes cannot be saved.';
+    status.className = 'wish-status error'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Sending... 💌';
+  status.textContent = ''; status.className = 'wish-status';
+
+  try {
+    // Get current wishes
+    const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    const getData = await getRes.json();
+    const wishes = getData.record?.wishes || [];
+
+    // Add new wish
+    const newWish = {
+      name, text,
+      emoji: wishEmojis[Math.floor(Math.random()*wishEmojis.length)],
+      date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+    };
+    wishes.push(newWish);
+
+    // Save back
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'X-Master-Key': JSONBIN_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wishes })
+    });
+
+    document.getElementById('wishName').value = '';
+    document.getElementById('wishText').value = '';
+    status.textContent = '🎉 Your wish was sent! Thank you!';
+    status.className = 'wish-status success';
+    renderWishes(wishes);
+  } catch(e) {
+    status.textContent = '⚠️ Something went wrong. Please try again!';
+    status.className = 'wish-status error';
+  }
+
+  btn.disabled = false; btn.textContent = 'Send Wish 💌';
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ════════════════════════════════════════════
+// SHARE
+// ════════════════════════════════════════════
+const siteUrl = window.location.href;
+document.getElementById('shareWa').href = `https://wa.me/?text=🎂 Agastya Bansal is turning 1! Come celebrate: ${encodeURIComponent(siteUrl)}`;
+
+function copyLink() {
+  navigator.clipboard.writeText(siteUrl).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '🔗 Copy Link', 2000);
+  });
+}
+
+// ════════════════════════════════════════════
+// SCROLL REVEAL
+// ════════════════════════════════════════════
+const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
